@@ -1,0 +1,7 @@
+FROM alpine-jdk:base
+LABEL maintainer="Oussama_Imen"
+RUN apk --no-cache add netcat-openbsd
+COPY proxy-service/target/proxy-service-0.0.1-SNAPSHOT.jar /opt/lib/
+COPY proxyservice_wait-for-it.sh /opt/bin/
+RUN chmod 755 /opt/bin/proxyservice_wait-for-it.sh
+EXPOSE 9999

@@ -1,0 +1,8 @@
+FROM alpine-jdk:base
+LABEL maintainer="Oussama_Imen"
+RUN apk --no-cache add netcat-openbsd
+COPY product-service/target/product-service-0.0.1-SNAPSHOT.jar /opt/lib/
+COPY productservice_wait-for-it.sh /opt/bin/
+RUN chmod 755 /opt/bin/productservice_wait-for-it.sh
+EXPOSE 8080
+

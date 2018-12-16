@@ -1,0 +1,156 @@
+version: '2.0'
+services:
+    config-service:
+        container_name: config-service
+        build:
+            context: .
+            dockerfile: Dockerfile-configservice
+        image: config-service:latest
+        expose:
+            - 8888
+        ports:
+            - 8888:8888
+        networks:
+            - spring-cloud-network
+        logging:
+            driver: json-file
+    discovery-service:
+        container_name: discovery-service
+        build:
+            context: .
+            dockerfile: Dockerfile-DiscoveryService
+        image: discovery-service:latest
+        entrypoint: /opt/bin/discoveryservice_wait-for-it.sh
+        environment:
+            SPRING_APPLICATION_JSON: '{"spring":{"cloud":{"config":{"uri":"http://config-service:8888"}}}}'
+            EUREKA_INSTANCE_PREFER_IP_ADDRESS: "false"
+        expose:
+            - 8761
+        ports:
+            - 8761:8761
+        networks:
+            - spring-cloud-network
+        links:
+            - config-service:config-service
+        depends_on:
+            - config-service
+        logging:
+            driver: json-file
+    proxy-service:
+        container_name: proxy-service
+        build:
+            context: .
+            dockerfile: Dockerfile-ProxyService
+        image: proxy-service:latest
+        entrypoint: /opt/bin/proxyservice_wait-for-it.sh
+        environment:
+            SPRING_APPLICATION_JSON: '{"spring":{"cloud":{"config":{"uri":"http://config-service:8888"}}}}'
+        expose:
+            - 9999
+        ports:
+            - 9999:9999
+        networks:
+            - spring-cloud-network
+        links:
+            - config-service:config-service
+            - discovery-service:discovery-service
+        depends_on:
+            - config-service
+            - discovery-service
+        logging:
+            driver: json-file
+    product-service-0:
+        container_name: product-service-0
+        build:
+            context: .
+            dockerfile: Dockerfile-ProductService
+        image: product-service:latest
+        entrypoint: /opt/bin/productservice_wait-for-it.sh
+        environment:
+            SPRING_APPLICATION_JSON: '{"spring":{"cloud":{"config":{"uri":"http://config-service:8888"}}}}'
+        expose:
+            - 8080
+        ports:
+            - 8080:8080
+        networks:
+            - spring-cloud-network
+        links:
+            - config-service:config-service
+            - discovery-service:discovery-service
+        depends_on:
+            - config-service
+            - discovery-service
+        logging:
+            driver: json-file
+    product-service-1:
+        container_name: product-service-1
+        build:
+            context: .
+            dockerfile: Dockerfile-ProductService
+        image: product-service:latest
+        entrypoint: /opt/bin/productservice_wait-for-it.sh
+        environment:
+            SPRING_APPLICATION_JSON: '{"spring":{"cloud":{"config":{"uri":"http://config-service:8888"}}}}'
+        expose:
+            - 8080
+        ports:
+            - 8081:8080
+        networks:
+            - spring-cloud-network
+        links:
+            - config-service:config-service
+            - discovery-service:discovery-service
+        depends_on:
+            - config-service
+            - discovery-service
+        logging:
+            driver: json-file
+    product-service-2:
+        container_name: product-service-2
+        build:
+            context: .
+            dockerfile: Dockerfile-ProductService
+        image: product-service:latest
+        entrypoint: /opt/bin/productservice_wait-for-it.sh
+        environment:
+            SPRING_APPLICATION_JSON: '{"spring":{"cloud":{"config":{"uri":"http://config-service:8888"}}}}'
+        expose:
+            - 8080
+        ports:
+            - 8082:8080
+        networks:
+            - spring-cloud-network
+        links:
+            - config-service:config-service
+            - discovery-service:discovery-service
+        depends_on:
+            - config-service
+            - discovery-service
+        logging:
+            driver: json-file
+    product-service-3:
+        container_name: product-service-3
+        build:
+            context: .
+            dockerfile: Dockerfile-ProductService
+        image: product-service:latest
+        entrypoint: /opt/bin/productservice_wait-for-it.sh
+        environment:
+            SPRING_APPLICATION_JSON: '{"spring":{"cloud":{"config":{"uri":"http://config-service:8888"}}}}'
+        expose:
+            - 8080
+        ports:
+            - 8083:8080
+        networks:
+            - spring-cloud-network
+        links:
+            - config-service:config-service
+            - discovery-service:discovery-service
+        depends_on:
+            - config-service
+            - discovery-service
+        logging:
+            driver: json-file
+networks:
+    spring-cloud-network:
+        driver: bridge

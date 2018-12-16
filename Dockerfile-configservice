@@ -1,0 +1,7 @@
+FROM alpine-jdk:base
+LABEL maintainer="Oussama_Imen"
+COPY config-service/target/config-service-0.0.1-SNAPSHOT.jar /opt/lib/
+ENV SPRING_APPLICATION_JSON='{"spring": {"cloud": {"config": {"server": {"git": {"uri": "https://github.com/OussamaSghaier/e-services_configurations"}}}}}}'
+ENTRYPOINT ["/usr/bin/java"]
+CMD ["-jar", "/opt/lib/config-service-0.0.1-SNAPSHOT.jar"]
+EXPOSE 8888
