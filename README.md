@@ -342,5 +342,5 @@ On a ainsi une architecture fonctionnelle de microservices composée des élemen
 * 3 Product Services
          
 <br/>
-&nbsp; Pour arrêter l'environnement complet, nous pouvons utiliser cette commande: <br/>
+&nbsp; Pour arrêter tout l'environnement, nous pouvons utiliser la commande suivante: <br/>
 <code>docker-compose down </code>
